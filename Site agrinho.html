@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Conexão entre o Campo e a Cidade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-bg: #ffffff;
+      --color-text-primary: #111827;
+      --color-text-secondary: #6b7280;
+      --color-accent: #2a7a2a; /* Verde inspirado no campo */
+      --color-card-bg: rgba(249, 250, 251, 0.9); /* semi-transparent to show background */
+      --color-shadow: rgba(0,0,0,0.05);
+      --radius: 0.75rem;
+      --transition: 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 1rem 3rem;
+      background: url('https://m.media-amazon.com/images/I/71CJtiCg6XL._AC_UF894,1000_QL80_.jpg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      z-index: 0;
+    }
+    /* overlay to soften background */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-color: rgba(255 255 255 / 0.85);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    main {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+      padding-top: 3rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    header {
+      width: 100%;
+      position: sticky;
+      top: 0;
+      background: var(--color-bg);
+      border-bottom: 1px solid #e5e7eb;
+      z-index: 10;
+      box-shadow: 0 1px 5px var(--color-shadow);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+    }
+
+    .logo {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--color-text-primary);
+      user-select: none;
+    }
+
+    nav a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 2rem;
+      font-size: 1rem;
+      transition: color var(--transition);
+    }
+
+    nav a:hover,
+    nav a:focus {
+      color: var(--color-accent);
+      outline: none;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 5rem 1rem 3rem;
+      color: var(--color-accent);
+    }
+
+    .hero h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .hero p {
+      font-size: clamp(1.125rem, 2vw, 1.5rem);
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    section {
+      display: grid;
+      gap: 2.5rem;
+      padding: 0 1rem;
+    }
+
+    /* Cards Grid: 1 column on small, 2 on medium, 3 on large */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media(min-width: 600px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media(min-width: 900px) {
+      .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .card {
+      background: var(--color-card-bg);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: 0 6px 12px var(--color-shadow);
+      color: var(--color-text-primary);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: transform var(--transition), box-shadow var(--transition);
+      backdrop-filter: saturate(180%) blur(8px);
+      -webkit-backdrop-filter: saturate(180%) blur(8px);
+    }
+
+    .card:hover,
+    .card:focus-within {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(42, 122, 42, 0.3);
+      outline: none;
+    }
+
+    .card h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.375rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--color-accent);
+      position: relative;
+      padding-bottom: 0.3rem;
+    }
+
+    /* Subtle underline below headings in accent green */
+    .card h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 3rem;
+      height: 3px;
+      background-color: var(--color-accent);
+      border-radius: 2px;
+    }
+
+    #alimentos-title,
+    #economia-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      margin-bottom: 2rem;
+      text-align: center;
+      position: relative;
+      padding-bottom: 0.4rem;
+      display: inline-block;
+    }
+    #alimentos-title::after,
+    #economia-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 5rem;
+      height: 4px;
+      background-color: var(--color-accent);
+      border-radius: 3px;
+    }
+
+    footer {
+      margin-top: 4rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+      user-select: none;
+      z-index: 10;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container" role="navigation" aria-label="Menu Principal">
+      <div class="logo" tabindex="0">Campo &amp; Cidade</div>
+      <nav>
+        <a href="#campo" tabindex="0">Campo</a>
+        <a href="#cidade" tabindex="0">Cidade</a>
+        <a href="#conexao" tabindex="0">Conexão</a>
+        <a href="#alimentos" tabindex="0">Alimentos</a>
+        <a href="#economia" tabindex="0">Economia</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="hero" role="banner" aria-labelledby="hero-title">
+      <h1 id="hero-title">A Conexão Essencial entre o Campo e a Cidade</h1>
+      <p>Explore como o campo e a cidade se complementam, formando uma relação de interdependência que sustenta nosso modo de vida.</p>
+    </section>
+
+    <section id="campo" aria-labelledby="campo-title">
+      <div class="cards-grid">
+        <article class="card" tabindex="0">
+          <h2 id="campo-title">O Campo</h2>
+          <p>O campo é fonte de recursos naturais, produção agrícola e criação de animais. É o coração das matérias-primas que abastecem a cidade.</p>
+        </article>
+        <article class="card" tabindex="0">
+          <h2>Ruralidade e Vida Natural</h2>
+          <p>O campo oferece espaços abertos, biodiversidade e a riqueza da natureza preservada, essenciais para equilíbrio ambiental.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="cidade" aria-labelledby="cidade-title">
+      <div class="cards-grid">
+        <article class="card" tabindex="0">
+          <h2 id="cidade-title">A Cidade</h2>
+          <p>A cidade oferece infraestrutura, serviços, oportunidades educacionais e empregos que impulsionam a economia e o desenvolvimento.</p>
+        </article>
+        <article class="card" tabindex="0">
+          <h2>Modernidade e Conectividade</h2>
+          <p>As cidades conectam pessoas, tecnologias e culturas, criando centros dinâmicos de inovação e colaboração.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="conexao" aria-labelledby="conexao-title">
+      <div class="cards-grid">
+        <article class="card" tabindex="0">
+          <h2 id="conexao-title">A Conexão</h2>
+          <p>O campo e a cidade estão ligados por um ciclo contínuo de troca: a produção rural abastece as cidades, que por sua vez fornecem serviços e tecnologia ao campo.</p>
+        </article>
+        <article class="card" tabindex="0">
+          <h2>Interdependência &amp; Sustentabilidade</h2>
+          <p>Essa relação fortalece a sustentabilidade social, econômica e ambiental, promovendo o desenvolvimento equilibrado e a qualidade de vida para todos.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="alimentos" aria-labelledby="alimentos-title">
+      <h2 id="alimentos-title">Alimentos Mais Consumidos pelo Brasileiro e seus Benefícios</h2>
+      <div class="cards-grid">
+        <article class="card" tabindex="0">
+          <h2>Arroz e Feijão</h2>
+          <p>Combinação clássica brasileira, rica em proteínas, fibras e carboidratos complexos que fornecem energia duradoura e promovem a saúde intestinal.</p>
+        </article>
+        <article class="card" tabindex="0">
+          <h2>Frutas Tropicais</h2>
+          <p>Manga, banana, acerola e outras são ricas em vitaminas, antioxidantes e fibras, ajudando na imunidade e na digestão.</p>
+        </article>
+        <article class="card" tabindex="0">
+          <h2>Legumes e Verduras</h2>
+          <p>Essenciais para uma dieta equilibrada, fornecem vitaminas, minerais e fibras que ajudam na prevenção de doenças e no bem-estar geral.</p>
+        </article>
+        <article class="card" tabindex="0">
+          <h2>Café</h2>
+          <p>Bebida tradicional, rica em antioxidantes que auxiliam na concentração, disposição e têm efeito estimulante natural.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="economia" aria-labelledby="economia-title">
+      <h2 id="economia-title">A Economia</h2>
+      <div class="cards-grid">
+        <article class="card" tabindex="0">
+          <h2>Contribuição Agrícola</h2>
+          <p>A agricultura do campo é fundamental para a economia nacional, fornecendo alimentos, matérias-primas e empregos para milhares de pessoas.</p>
+        </article>
+        <article class="card" tabindex="0">
+          <h2>Comércio Urbano</h2>
+          <p>A cidade funciona como centro comercial e industrial, distribuindo produtos do campo e gerando serviços e inovação para o crescimento econômico.</p>
+        </article>
+        <article class="card" tabindex="0">
+          <h2>Crescimento Sustentável</h2>
+          <p>A parceria entre campo e cidade promove o desenvolvimento sustentável, equilibrando progresso econômico com preservação ambiental.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer>
+    &copy; 2024 Campo &amp; Cidade - Todos os direitos reservados
+  </footer>
+</body>
+</html>
+
